@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: iac-database
+  name: iac-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iac-database
+  template:
+    metadata:
+      labels:
+        app: iac-database
+    spec:
+      containers:
+        - image: postgres:13.2-alpine
+          name: iac-database
+          envFrom:
+            - configMapRef:
+                name: iac-database-config
+            - secretRef:
+                name: iac-database-secret
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: iac-database-svc
+spec:
+  selector:
+    app: iac-database
+  ports:
+    - port: 5432
+      targetPort: 5432
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: iac-database-config
+data:
+  POSTGRES_HOST: iac-database-svc
+  POSTGRES_DB: postgres
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: iac-database-secret
+type: Opaque
+data:
+  POSTGRES_USER: cG9zdGdyZXM=
+  POSTGRES_PASSWORD: cG9zdGdyZXM=

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: iac-frontend
+  name: iac-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iac-frontend
+  template:
+    metadata:
+      labels:
+        app: iac-frontend
+    spec:
+      containers:
+      - image: iac-frontend
+        name: iac-frontend
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: iac-frontend-svc
+spec:
+  selector:
+    app: iac-frontend
+  ports:
+    - port: 3000
+      targetPort: 3000

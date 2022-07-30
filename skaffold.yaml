@@ -1,0 +1,22 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: iac-dev
+build:
+  artifacts:
+  - image: iac-backend
+    context: backend
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      infer: ["**/*"]
+  - image: iac-frontend
+    context: frontend
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+    - iac/database.yaml
+    - iac/backend.yaml
+    - iac/frontend.yaml
