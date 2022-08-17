@@ -27,4 +27,5 @@ RUN pip install -r requirements.txt
 COPY . /app
 
 CMD ["gunicorn", "--reload", "--workers=5", "-b", "0.0.0.0:8000", "project.wsgi:application"]
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
