@@ -1,65 +1,43 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: minimal-ingress-frontend
+  name: minimal-ingress
+    # annotations:
+    #   nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
-    - http:
+    - host: 39.pr.k8s.lan
+      http:
         paths:
-        - path: /(.*)
-          pathType: Prefix
-          backend:
-            service:
-              name: iac-frontend-svc
-              port:
-                number: 3000
-        - path: /api(/|$)(.*)
-          pathType: Prefix
-          backend:
-            service:
-              name: iac-backend-svc
-              port:
-                number: 8000
+          # Backend
+          - path: /static
+            pathType: Prefix
+            backend:
+              service:
+                name: iac-backend-svc
+                port:
+                  number: 8000
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: iac-backend-svc
+                port:
+                  number: 8000
+          - path: /admin
+            pathType: Prefix
+            backend:
+              service:
+                name: iac-backend-svc
+                port:
+                  number: 8000
 
----
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: minimal-ingress-backend-static
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /static/$2
-spec:
-  ingressClassName: nginx
-  rules:
-    - http:
-        paths:
-        - path: /static(/|$)(.*)
-          pathType: Prefix
-          backend:
-            service:
-              name: iac-backend-svc
-              port:
-                number: 8000
-
----
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: minimal-ingress-frontend-static
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /_next/$2
-spec:
-  ingressClassName: nginx
-  rules:
-    - http:
-        paths:
-        - path: /_next(/|$)(.*)
-          pathType: Prefix
-          backend:
-            service:
-              name: iac-frontend-svc
-              port:
-                number: 3000
+          # Frontend
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: iac-frontend-svc
+                port:
+                  number: 3000
