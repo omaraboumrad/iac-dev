@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: 39.pr.k8s.lan
+    - host: {{ .Release.Name}}.pr.k8s.lan
       http:
         paths:
           # Backend

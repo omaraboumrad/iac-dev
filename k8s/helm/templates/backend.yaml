@@ -2,21 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: iac-backend
-  name: iac-backend
+    app: {{ .Values.backend.name }}
+  name: {{ .Values.backend.name }}
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: iac-backend
+      app: {{ .Values.backend.name }}
   template:
     metadata:
       labels:
-        app: iac-backend
+        app: {{ .Values.backend.name }}
     spec:
       containers:
-      - image: iac-backend
-        name: iac-backend
+      - image: {{ .Values.backend.name }}
+        name: {{ .Values.backend.name }}
+        imagePullPolicy: IfNotPresent
         envFrom:
           - configMapRef:
               name: iac-database-config
@@ -28,10 +29,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: iac-backend-svc
+  name: {{ .Values.backend.name }}-svc
 spec:
   selector:
-    app: iac-backend
+    app: {{ .Values.backend.name }}
   ports:
     - port: 8000
       targetPort: 8000

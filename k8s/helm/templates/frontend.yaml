@@ -17,6 +17,7 @@ spec:
       containers:
       - image: iac-frontend
         name: iac-frontend
+        imagePullPolicy: IfNotPresent
 
 ---
 
